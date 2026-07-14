@@ -51,9 +51,7 @@ stopifnot(sum(is.na(mdib_pd_dat$record_id)) == 0)
 
 # Identify survey item columns, excluding participant ID and REDCap event name.
 
-target_cols <- names(mdib_pd_dat)[
-  !(names(mdib_pd_dat) %in% c("record_id", "redcap_event_name"))
-]
+target_cols <- setdiff(names(mdib_pd_dat), c("record_id", "redcap_event_name"))
 
 # Identify baseline rows for participants who consented but never started the
 # survey. These rows contain only NA, 0, or "" across all survey item columns.
@@ -69,7 +67,7 @@ for (i in 1:nrow(mdib_pd_dat)) {
 
 # Confirm that 7 participants meet this criterion.
 
-stopifnot(nrow(mdib_pd_dat[row_never_started, ]) == 7)
+stopifnot(sum(row_never_started) == 7)
 stopifnot(length(unique(mdib_pd_dat$record_id[row_never_started])) == 7)
 
 # Remove participants who consented but never started the baseline survey.
@@ -92,51 +90,27 @@ stopifnot(length(unique(mdib_pd_dat$record_id)) == 88)
 # use items from the AUDIT-C. The identified item lists are checked below against
 # the expected variable names in the current PD data export.
 
-mdib_neg_items <- names(mdib_pd_dat)[
-  grepl("md_bbsiq", names(mdib_pd_dat)) &
-    grepl("neg", names(mdib_pd_dat))
-]
+nms <- names(mdib_pd_dat)
 
-mdib_ben_items <- names(mdib_pd_dat)[
-  grepl("md_bbsiq", names(mdib_pd_dat)) &
-    grepl("benign", names(mdib_pd_dat))
-]
+mdib_neg_items <- nms[startsWith(nms, "md_bbsiq_") & endsWith(nms, "neg")]
+mdib_ben_items <- nms[startsWith(nms, "md_bbsiq_") & endsWith(nms, "benign")]
 
 # BBSIQ items are identified separately from MDIB items by excluding variables
 # that begin with the MDIB-specific "md_bbsiq" prefix.
 
-bbsiq_neg_items_mdib <- names(mdib_pd_dat)[
-  grepl("bbsiq", names(mdib_pd_dat)) &
-    !grepl("md_bbsiq", names(mdib_pd_dat)) &
-    grepl("neg", names(mdib_pd_dat))
-]
+bbsiq_neg_items_mdib <- nms[startsWith(nms, "bbsiq_") & endsWith(nms, "neg")]
+bbsiq_ben_items_mdib <- nms[startsWith(nms, "bbsiq_") & endsWith(nms, "benign")]
 
-bbsiq_ben_items_mdib <- names(mdib_pd_dat)[
-  grepl("bbsiq", names(mdib_pd_dat)) &
-    !grepl("md_bbsiq", names(mdib_pd_dat)) &
-    grepl("benign", names(mdib_pd_dat))
-]
+asi_items <- nms[startsWith(nms, "asi_")]
 
-asi_items <- names(mdib_pd_dat)[grepl("asi_", names(mdib_pd_dat))]
+bfne2_items <- nms[startsWith(nms, "bfne_")]
 
-bfne2_items <- names(mdib_pd_dat)[grepl("bfne_", names(mdib_pd_dat))]
+neuroqol_anx_items <- nms[startsWith(nms, "neuroqol_") & !endsWith(nms, "_complete")]
 
-neuroqol_anx_items <- names(mdib_pd_dat)[
-  grepl("neuroqol", names(mdib_pd_dat)) &
-    !grepl("complete", names(mdib_pd_dat))
-]
+sads_items     <- nms[startsWith(nms, "sad_") & !endsWith(nms, "_v2")]
+sads_red_items <- nms[startsWith(nms, "sad_") & endsWith(nms, "_v2")]
 
-sads_items <- names(mdib_pd_dat)[
-  grepl("sad_", names(mdib_pd_dat)) &
-    !grepl("_v2", names(mdib_pd_dat))
-]
-
-sads_red_items <- names(mdib_pd_dat)[
-  grepl("sad_", names(mdib_pd_dat)) &
-    grepl("_v2", names(mdib_pd_dat))
-]
-
-auditc_items <- names(mdib_pd_dat)[grepl("alcohol_audit_c", names(mdib_pd_dat))]
+auditc_items <- nms[startsWith(nms, "alcohol_audit_c")]
 
 # Confirm that the identified item variables match the expected variable names in
 # the current PD data export.
@@ -235,7 +209,6 @@ stopifnot(length(neuroqol_anx_items) == 8)
 stopifnot(length(sads_items) == 28)
 stopifnot(length(sads_red_items) == 8)
 stopifnot(length(auditc_items) == 3)
-
 
 # ---------------------------------------------------------------------------- #
 # Rename MDIB items ----
