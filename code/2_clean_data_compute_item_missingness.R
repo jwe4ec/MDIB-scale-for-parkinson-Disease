@@ -384,9 +384,10 @@ bbsiq_neg_ext_items_mdib <- c(
 stopifnot(length(bbsiq_neg_int_items_mdib) == 7)
 stopifnot(length(bbsiq_neg_ext_items_mdib) == 7)
 
-# Define reduced ASI subscale item sets for physical, cognitive, and social
-# concerns. These reduced item sets are based on prior three-factor solutions and
-# item-retention decisions described in the ASI scoring documentation.
+# Define reduced ASI subscale item sets for physical, cognitive, and social concerns. 
+# - Note: These reduced item sets are based on prior three-factor solutions and item-
+# retention decisions described in Section S2.2 Scoring of Anxiety Sensitivity Index in
+# the supplement (https://osf.io/bsft6 ) to Gibson et al. (2025; https://doi.org/pw62 ).
 
 asi_red_phy_items <- c("asi_11", "asi_9")
 asi_red_cog_items <- c("asi_12", "asi_2")
