@@ -352,10 +352,14 @@ mdib_neg_9_ext_items <- c(
 stopifnot(length(mdib_neg_9_int_items) == 3)
 stopifnot(length(mdib_neg_9_ext_items) == 6)
 
-# Define theory-based BBSIQ negative-bias item sets by threat domain. The suffix
-# "_mdib" is retained because these are the BBSIQ item names as they appear in
-# the MDIB/PD REDCap dataset, not because they refer to the HD sample or HD
-# analysis.
+# Define theory-based BBSIQ negative-bias item sets by threat domain.
+# - Note: The objects for BBSIQ items are appended with "mdib" because prior analyses
+# (https://github.com/jwe4ec/pa-20-206) found that BBSIQ item names in the MDIB-HD
+# dataset differ from those in the MindTrails-HD Data Server dataset. Given that the
+# BBSIQ item names in the present MDIB-PD dataset are the same as those in the MDIB-HD
+# dataset, the BBSIQ item names in the present dataset also differ from those in the
+# MT-HD dataset. Although the MT-HD dataset is not relevant to the present analyses,
+# we retain the label for clarity.
 
 bbsiq_neg_int_items_mdib <- c(
   "bbsiq_2b_neg",
