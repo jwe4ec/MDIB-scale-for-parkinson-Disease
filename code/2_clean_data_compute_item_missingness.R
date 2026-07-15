@@ -397,8 +397,8 @@ stopifnot(length(asi_red_phy_items) == 2)
 stopifnot(length(asi_red_cog_items) == 2)
 stopifnot(length(asi_red_soc_items) == 2)
 
-# Define the preferred 8-item BFNE-II scale by removing the four reverse-scored
-# items excluded by Carleton et al. (2007).
+# Define the preferred 8-item BFNE-II scale by removing the four items excluded by 
+# Carleton et al. (2007; Table 1; https://doi.org/bgn7v6 )
 
 bfne2_8_items <- bfne2_items[
   !(bfne2_items %in% c("bfne_2", "bfne_4", "bfne_7", "bfne_11"))
