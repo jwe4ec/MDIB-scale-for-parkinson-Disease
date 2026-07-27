@@ -550,8 +550,8 @@ stopifnot(
 # ---------------------------------------------------------------------------- #
 
 # Recode planned AUDIT-C skip values as 0 at baseline. REDCap skipped AUDIT-C
-# items when participants reported no lifetime alcohol use or no current alcohol
-# use. These skipped items indicate non-use rather than item nonresponse.
+# items when participants reported no lifetime alcohol use or "never" for current
+# alcohol use. These skipped items indicate non-use rather than item nonresponse.
 
 # If AUDIT-C Item 1 was 0 ("never"), Items 2 and 3 were skipped because they were
 # not applicable. Recode Items 2 and 3 as 0 for these participants.
@@ -593,7 +593,6 @@ stopifnot(
     c("alcohol_audit_c_2", "alcohol_audit_c_3")
   ])) == 0
 )
-
 
 # ---------------------------------------------------------------------------- #
 # Identify participants with incomplete MDIB data at baseline ----
@@ -664,7 +663,6 @@ write.csv(
   file.path(missing_rates_path, "incomplete_mdib_bl_exclusion_tbl.csv"),
   row.names = FALSE
 )
-
 
 # ---------------------------------------------------------------------------- #
 # Compute scale-level missingness due to all items coded as "prefer not to answer" ----
