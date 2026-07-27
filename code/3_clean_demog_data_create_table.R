@@ -337,7 +337,7 @@ dem_dat$country <- trimws(dem_dat$country)
 
 united_states <- c(
   "America", "U.S.", "united states", "United States",
-  "United States of America", "US", "usa", "Usa", "USA"
+  "United States of America", "us", "US", "usa", "Usa", "USA"
 )
 
 dem_dat$country[dem_dat$country %in% united_states] <- "United States"
