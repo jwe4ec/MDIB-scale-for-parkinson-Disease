@@ -834,7 +834,7 @@ mdib_bl_item_missing_tbl <- mdib_bl_item_missing_tbl[
   mdib_bl_item_missing_tbl$n_missing > 0,
 ]
 
-row.names(mdib_bl_item_missing_tbl) <- 1:nrow(mdib_bl_item_missing_tbl)
+row.names(mdib_bl_item_missing_tbl) <- NULL
 
 # Export item-level baseline MDIB missingness table.
 
@@ -926,11 +926,3 @@ dir.create("./data/helper", recursive = TRUE, showWarnings = FALSE)
 save(mdib_pd_dat, file = "./data/further_clean/mdib_pd_dat.RData")
 save(mdib_dat_items, file = "./data/helper/mdib_dat_items.RData")
 save(mdib_item_map,  file = "./data/helper/mdib_item_map.RData")
-
-
-
-
-
-
-
-
