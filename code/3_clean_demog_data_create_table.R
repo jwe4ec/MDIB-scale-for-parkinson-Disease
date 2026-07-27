@@ -582,6 +582,12 @@ write.csv(dem_tbl_ext, paste0(dem_path, "dem_tbl_extended.csv"), row.names = FAL
 
 format_dem_tbl <- function(dem_tbl, title) {
   
+  # Recode labels
+  
+  dem_tbl$label[dem_tbl$label == "Doctorate/ PhD"]    <- "Doctorate/PhD"
+  dem_tbl$label[dem_tbl$label == "Working full-time"] <- "Working full time"
+  dem_tbl$label[dem_tbl$label == "Working part-time"] <- "Working part time"
+  
   # Format the label column using Markdown.
   
   dem_tbl$label_md <- dem_tbl$label
@@ -601,11 +607,11 @@ format_dem_tbl <- function(dem_tbl, title) {
   dem_tbl$label_md <- gsub("n \\(%\\)", "*n* \\(%\\)", dem_tbl$label_md)
   dem_tbl$label_md <- gsub("M \\(SD\\)", "*M* \\(*SD*\\)", dem_tbl$label_md)
   
-  dem_tbl <- dem_tbl[c("label_md", names(dem_tbl)[names(dem_tbl) != "label_md"])]
+  dem_tbl <- dem_tbl[c("label_md", setdiff(names(dem_tbl), "label_md"))]
   
   # Define columns to display.
   
-  target_cols <- names(dem_tbl)[!(names(dem_tbl) %in% "label")]
+  target_cols <- setdiff(names(dem_tbl), "label")
   
   # Create flextable.
   
@@ -627,14 +633,6 @@ format_dem_tbl <- function(dem_tbl, title) {
       value    = "Value"
     ) |>
     colformat_md(j = "label_md", part = "body") |>
-    labelizor(
-      part = "body",
-      labels = c(
-        "Doctorate/ PhD"    = "Doctorate/PhD",
-        "Working full-time" = "Working full time",
-        "Working part-time" = "Working part time"
-      )
-    ) |>
     autofit()
   
   return(dem_tbl_ft)
