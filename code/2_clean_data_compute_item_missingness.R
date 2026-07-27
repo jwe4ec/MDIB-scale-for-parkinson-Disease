@@ -650,7 +650,9 @@ stopifnot(all(incompl_mdib_bl_tbl$n_mdib_incomplete_bl > 0))
 # leaving 82 participants in the analysis sample. If these checks fail after a
 # future data export, inspect incompl_mdib_bl_tbl and update the expected counts.
 
+stopifnot(length(unique(mdib_bl_item_dat$record_id)) == 88)
 stopifnot(length(incompl_mdib_bl_data_ids) == 6)
+
 stopifnot(88 - length(incompl_mdib_bl_data_ids) == 82)
 
 # Export the diagnostic table for reproducibility.
