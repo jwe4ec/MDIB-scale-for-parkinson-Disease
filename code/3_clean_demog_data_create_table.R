@@ -178,7 +178,6 @@ stopifnot(sum(dem_dat$race_coll == "Missing", na.rm = TRUE) == 2)
 
 table(dem_dat$race_coll, useNA = "ifany")
 
-
 # ---------------------------------------------------------------------------- #
 # Clean categorical demographic variables ----
 # ---------------------------------------------------------------------------- #
@@ -319,7 +318,6 @@ stopifnot(all(sapply(
   function(x) sum(is.na(x)) == 0
 )))
 
-
 # Inspect cleaned categorical demographic distributions.
 
 lapply(
@@ -327,7 +325,6 @@ lapply(
   table,
   useNA = "ifany"
 )
-
 
 # ---------------------------------------------------------------------------- #
 # Clean country ----
@@ -352,7 +349,6 @@ stopifnot(sum(table(dem_dat$country, useNA = "ifany")) == 82)
 stopifnot(sum(is.na(dem_dat$country)) == 0)
 
 table(dem_dat$country, useNA = "ifany")
-
 
 # ---------------------------------------------------------------------------- #
 # Clean study awareness ----
@@ -414,7 +410,6 @@ stopifnot(sum(is.na(dem_dat$study_awareness)) == 0)
 
 table(dem_dat$study_awareness, useNA = "ifany")
 
-
 # ---------------------------------------------------------------------------- #
 # Clean survey help ----
 # ---------------------------------------------------------------------------- #
@@ -445,7 +440,6 @@ stopifnot(sum(is.na(dem_dat$survey_help)) == 0)
 
 table(dem_dat$survey_help, useNA = "ifany")
 
-
 # ---------------------------------------------------------------------------- #
 # Save cleaned demographic data ----
 # ---------------------------------------------------------------------------- #
@@ -453,7 +447,6 @@ table(dem_dat$survey_help, useNA = "ifany")
 dir.create("./data/further_clean", recursive = TRUE, showWarnings = FALSE)
 
 save(dem_dat, file = "./data/further_clean/dem_dat.RData")
-
 
 # ---------------------------------------------------------------------------- #
 # Define function to compute demographic descriptives ----
@@ -580,7 +573,6 @@ dir.create(dem_path, recursive = TRUE, showWarnings = FALSE)
 write.csv(dem_tbl,     paste0(dem_path, "dem_tbl.csv"),          row.names = FALSE)
 write.csv(dem_tbl_ext, paste0(dem_path, "dem_tbl_extended.csv"), row.names = FALSE)
 
-
 # ---------------------------------------------------------------------------- #
 # Format demographics table ----
 # ---------------------------------------------------------------------------- #
@@ -688,9 +680,3 @@ if (dem_tbl_orientation == "p") {
 }
 
 print(doc, target = paste0(dem_path, "dem_tbl.docx"))
-
-
-
-
-
-
