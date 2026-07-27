@@ -454,7 +454,6 @@ count_item_na <- function(dat, items, time_points) {
   sum(is.na(dat_sub))
 }
 
-
 # Summarize item-level NA values by scale.
 
 na_diagnostic_tbl <- data.frame(
@@ -481,9 +480,6 @@ stopifnot(
   all(na_diagnostic_tbl$n_na == c(81, 162, 114, 228, 64, 64, 48, 112))
 )
 
-#na_diagnostic_tbl
-
-
 # ---------------------------------------------------------------------------- #
 # Inspect planned AUDIT-C skip patterns ----
 # ---------------------------------------------------------------------------- #
@@ -508,8 +504,8 @@ n_na_auditc_alcohol_never <- sum(is.na(
 ))
 stopifnot(n_na_auditc_alcohol_never == 51)
 
-# REDCap skipped AUDIT-C Items 2 and 3 when Item 1 was 0, indicating no current
-# alcohol use.
+# REDCap skipped AUDIT-C Items 2 and 3 when Item 1 was 0, indicating "never" for
+# current alcohol use.
 
 n_na_auditc_item1_never <- sum(is.na(
   auditc_bl[
@@ -519,6 +515,8 @@ n_na_auditc_item1_never <- sum(is.na(
   ]
 ))
 stopifnot(n_na_auditc_item1_never == 34)
+
+stopifnot(n_obs_na_auditc == n_na_auditc_alcohol_never + n_na_auditc_item1_never)
 
 # ---------------------------------------------------------------------------- #
 # Inspect planned reduced SADS non-administration at follow-up ----
@@ -546,7 +544,6 @@ stopifnot(
   n_rows_all_items_na_sads_red * length(mdib_dat_items$sads_red) ==
     n_obs_na_sads_red
 )
-
 
 # ---------------------------------------------------------------------------- #
 # Recode planned AUDIT-C skip values ----
