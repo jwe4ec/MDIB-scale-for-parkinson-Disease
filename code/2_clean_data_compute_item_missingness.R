@@ -1,11 +1,6 @@
 # ---------------------------------------------------------------------------- #
-# Store working directory, load helper functions, and set package-version date ----
+# Load helper functions and set package-version date ----
 # ---------------------------------------------------------------------------- #
-
-# Store the project root directory. This object can be used later if the script
-# needs to return to the original working directory after writing outputs.
-
-wd_dir <- getwd()
 
 # Load custom helper functions used across the analysis scripts, including
 # version_control().

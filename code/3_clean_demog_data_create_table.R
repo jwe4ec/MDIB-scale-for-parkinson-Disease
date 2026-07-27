@@ -10,10 +10,8 @@
 # project root folder.
 
 # ---------------------------------------------------------------------------- #
-# Store working directory, load helper functions, and set package-version date ----
+# Load helper functions and set package-version date ----
 # ---------------------------------------------------------------------------- #
-
-wd_dir <- getwd()
 
 source("./code/1a_define_functions.R")
 

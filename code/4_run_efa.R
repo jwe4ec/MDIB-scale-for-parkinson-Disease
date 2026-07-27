@@ -62,10 +62,8 @@
 #   10-item solution.
 
 # ---------------------------------------------------------------------------- #
-# Store working directory, check R version, load packages ----
+# Check R version and load packages ----
 # ---------------------------------------------------------------------------- #
-
-wd_dir <- getwd()
 
 source("./code/1a_define_functions.R")
 
