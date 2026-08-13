@@ -62,12 +62,10 @@
 #   10-item solution.
 
 # ---------------------------------------------------------------------------- #
-# Store working directory, check R version, load packages ----
+# Check R version and load packages ----
 # ---------------------------------------------------------------------------- #
 
-wd_dir <- getwd()
-
-source("./1a_define_functions.R")
+source("./code/1a_define_functions.R")
 
 groundhog_day <- version_control()
 

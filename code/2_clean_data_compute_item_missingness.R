@@ -1,16 +1,11 @@
 # ---------------------------------------------------------------------------- #
-# Store working directory, load helper functions, and set package-version date ----
+# Load helper functions and set package-version date ----
 # ---------------------------------------------------------------------------- #
-
-# Store the project root directory. This object can be used later if the script
-# needs to return to the original working directory after writing outputs.
-
-wd_dir <- getwd()
 
 # Load custom helper functions used across the analysis scripts, including
 # version_control().
 
-source("./1a_define_functions.R")
+source("./code/1a_define_functions.R")
 
 # Check the R version used for the reproducibility snapshot, load groundhog, and
 # store the package-version date used when loading analysis packages.
@@ -23,7 +18,7 @@ groundhog_day <- version_control()
 
 # Import the de-identified PD Aim 1 REDCap data.
 
-mdib_pd_dat <- read.csv("final PD Aim 1 data_deid_2022-12-08_OSF.csv")
+mdib_pd_dat <- read.csv("./data/bot_cleaned/final PD Aim 1 data_deid_2022-12-08_OSF.csv")
 
 # ---------------------------------------------------------------------------- #
 # Define REDCap event names ----
@@ -51,9 +46,7 @@ stopifnot(sum(is.na(mdib_pd_dat$record_id)) == 0)
 
 # Identify survey item columns, excluding participant ID and REDCap event name.
 
-target_cols <- names(mdib_pd_dat)[
-  !(names(mdib_pd_dat) %in% c("record_id", "redcap_event_name"))
-]
+target_cols <- setdiff(names(mdib_pd_dat), c("record_id", "redcap_event_name"))
 
 # Identify baseline rows for participants who consented but never started the
 # survey. These rows contain only NA, 0, or "" across all survey item columns.
@@ -69,7 +62,7 @@ for (i in 1:nrow(mdib_pd_dat)) {
 
 # Confirm that 7 participants meet this criterion.
 
-stopifnot(nrow(mdib_pd_dat[row_never_started, ]) == 7)
+stopifnot(sum(row_never_started) == 7)
 stopifnot(length(unique(mdib_pd_dat$record_id[row_never_started])) == 7)
 
 # Remove participants who consented but never started the baseline survey.
@@ -92,51 +85,27 @@ stopifnot(length(unique(mdib_pd_dat$record_id)) == 88)
 # use items from the AUDIT-C. The identified item lists are checked below against
 # the expected variable names in the current PD data export.
 
-mdib_neg_items <- names(mdib_pd_dat)[
-  grepl("md_bbsiq", names(mdib_pd_dat)) &
-    grepl("neg", names(mdib_pd_dat))
-]
+nms <- names(mdib_pd_dat)
 
-mdib_ben_items <- names(mdib_pd_dat)[
-  grepl("md_bbsiq", names(mdib_pd_dat)) &
-    grepl("benign", names(mdib_pd_dat))
-]
+mdib_neg_items <- nms[startsWith(nms, "md_bbsiq_") & endsWith(nms, "neg")]
+mdib_ben_items <- nms[startsWith(nms, "md_bbsiq_") & endsWith(nms, "benign")]
 
 # BBSIQ items are identified separately from MDIB items by excluding variables
 # that begin with the MDIB-specific "md_bbsiq" prefix.
 
-bbsiq_neg_items_mdib <- names(mdib_pd_dat)[
-  grepl("bbsiq", names(mdib_pd_dat)) &
-    !grepl("md_bbsiq", names(mdib_pd_dat)) &
-    grepl("neg", names(mdib_pd_dat))
-]
+bbsiq_neg_items_mdib <- nms[startsWith(nms, "bbsiq_") & endsWith(nms, "neg")]
+bbsiq_ben_items_mdib <- nms[startsWith(nms, "bbsiq_") & endsWith(nms, "benign")]
 
-bbsiq_ben_items_mdib <- names(mdib_pd_dat)[
-  grepl("bbsiq", names(mdib_pd_dat)) &
-    !grepl("md_bbsiq", names(mdib_pd_dat)) &
-    grepl("benign", names(mdib_pd_dat))
-]
+asi_items <- nms[startsWith(nms, "asi_")]
 
-asi_items <- names(mdib_pd_dat)[grepl("asi_", names(mdib_pd_dat))]
+bfne2_items <- nms[startsWith(nms, "bfne_")]
 
-bfne2_items <- names(mdib_pd_dat)[grepl("bfne_", names(mdib_pd_dat))]
+neuroqol_anx_items <- nms[startsWith(nms, "neuroqol_") & !endsWith(nms, "_complete")]
 
-neuroqol_anx_items <- names(mdib_pd_dat)[
-  grepl("neuroqol", names(mdib_pd_dat)) &
-    !grepl("complete", names(mdib_pd_dat))
-]
+sads_items     <- nms[startsWith(nms, "sad_") & !endsWith(nms, "_v2")]
+sads_red_items <- nms[startsWith(nms, "sad_") & endsWith(nms, "_v2")]
 
-sads_items <- names(mdib_pd_dat)[
-  grepl("sad_", names(mdib_pd_dat)) &
-    !grepl("_v2", names(mdib_pd_dat))
-]
-
-sads_red_items <- names(mdib_pd_dat)[
-  grepl("sad_", names(mdib_pd_dat)) &
-    grepl("_v2", names(mdib_pd_dat))
-]
-
-auditc_items <- names(mdib_pd_dat)[grepl("alcohol_audit_c", names(mdib_pd_dat))]
+auditc_items <- nms[startsWith(nms, "alcohol_audit_c")]
 
 # Confirm that the identified item variables match the expected variable names in
 # the current PD data export.
@@ -235,7 +204,6 @@ stopifnot(length(neuroqol_anx_items) == 8)
 stopifnot(length(sads_items) == 28)
 stopifnot(length(sads_red_items) == 8)
 stopifnot(length(auditc_items) == 3)
-
 
 # ---------------------------------------------------------------------------- #
 # Rename MDIB items ----
@@ -379,10 +347,14 @@ mdib_neg_9_ext_items <- c(
 stopifnot(length(mdib_neg_9_int_items) == 3)
 stopifnot(length(mdib_neg_9_ext_items) == 6)
 
-# Define theory-based BBSIQ negative-bias item sets by threat domain. The suffix
-# "_mdib" is retained because these are the BBSIQ item names as they appear in
-# the MDIB/PD REDCap dataset, not because they refer to the HD sample or HD
-# analysis.
+# Define theory-based BBSIQ negative-bias item sets by threat domain.
+# - Note: The objects for BBSIQ items are appended with "mdib" because prior analyses
+# (https://github.com/jwe4ec/pa-20-206) found that BBSIQ item names in the MDIB-HD
+# dataset differ from those in the MindTrails-HD Data Server dataset. Given that the
+# BBSIQ item names in the present MDIB-PD dataset are the same as those in the MDIB-HD
+# dataset, the BBSIQ item names in the present dataset also differ from those in the
+# MT-HD dataset. Although the MT-HD dataset is not relevant to the present analyses,
+# we retain the label for clarity.
 
 bbsiq_neg_int_items_mdib <- c(
   "bbsiq_2b_neg",
@@ -407,9 +379,10 @@ bbsiq_neg_ext_items_mdib <- c(
 stopifnot(length(bbsiq_neg_int_items_mdib) == 7)
 stopifnot(length(bbsiq_neg_ext_items_mdib) == 7)
 
-# Define reduced ASI subscale item sets for physical, cognitive, and social
-# concerns. These reduced item sets are based on prior three-factor solutions and
-# item-retention decisions described in the ASI scoring documentation.
+# Define reduced ASI subscale item sets for physical, cognitive, and social concerns. 
+# - Note: These reduced item sets are based on prior three-factor solutions and item-
+# retention decisions described in Section S2.2 Scoring of Anxiety Sensitivity Index in
+# the supplement (https://osf.io/bsft6 ) to Gibson et al. (2025; https://doi.org/pw62 ).
 
 asi_red_phy_items <- c("asi_11", "asi_9")
 asi_red_cog_items <- c("asi_12", "asi_2")
@@ -419,8 +392,8 @@ stopifnot(length(asi_red_phy_items) == 2)
 stopifnot(length(asi_red_cog_items) == 2)
 stopifnot(length(asi_red_soc_items) == 2)
 
-# Define the preferred 8-item BFNE-II scale by removing the four reverse-scored
-# items excluded by Carleton et al. (2007).
+# Define the preferred 8-item BFNE-II scale by removing the four items excluded by 
+# Carleton et al. (2007; Table 1; https://doi.org/bgn7v6 )
 
 bfne2_8_items <- bfne2_items[
   !(bfne2_items %in% c("bfne_2", "bfne_4", "bfne_7", "bfne_11"))
@@ -476,7 +449,6 @@ count_item_na <- function(dat, items, time_points) {
   sum(is.na(dat_sub))
 }
 
-
 # Summarize item-level NA values by scale.
 
 na_diagnostic_tbl <- data.frame(
@@ -503,9 +475,6 @@ stopifnot(
   all(na_diagnostic_tbl$n_na == c(81, 162, 114, 228, 64, 64, 48, 112))
 )
 
-#na_diagnostic_tbl
-
-
 # ---------------------------------------------------------------------------- #
 # Inspect planned AUDIT-C skip patterns ----
 # ---------------------------------------------------------------------------- #
@@ -530,8 +499,8 @@ n_na_auditc_alcohol_never <- sum(is.na(
 ))
 stopifnot(n_na_auditc_alcohol_never == 51)
 
-# REDCap skipped AUDIT-C Items 2 and 3 when Item 1 was 0, indicating no current
-# alcohol use.
+# REDCap skipped AUDIT-C Items 2 and 3 when Item 1 was 0, indicating "never" for
+# current alcohol use.
 
 n_na_auditc_item1_never <- sum(is.na(
   auditc_bl[
@@ -541,6 +510,8 @@ n_na_auditc_item1_never <- sum(is.na(
   ]
 ))
 stopifnot(n_na_auditc_item1_never == 34)
+
+stopifnot(n_obs_na_auditc == n_na_auditc_alcohol_never + n_na_auditc_item1_never)
 
 # ---------------------------------------------------------------------------- #
 # Inspect planned reduced SADS non-administration at follow-up ----
@@ -569,14 +540,13 @@ stopifnot(
     n_obs_na_sads_red
 )
 
-
 # ---------------------------------------------------------------------------- #
 # Recode planned AUDIT-C skip values ----
 # ---------------------------------------------------------------------------- #
 
 # Recode planned AUDIT-C skip values as 0 at baseline. REDCap skipped AUDIT-C
-# items when participants reported no lifetime alcohol use or no current alcohol
-# use. These skipped items indicate non-use rather than item nonresponse.
+# items when participants reported no lifetime alcohol use or "never" for current
+# alcohol use. These skipped items indicate non-use rather than item nonresponse.
 
 # If AUDIT-C Item 1 was 0 ("never"), Items 2 and 3 were skipped because they were
 # not applicable. Recode Items 2 and 3 as 0 for these participants.
@@ -618,7 +588,6 @@ stopifnot(
     c("alcohol_audit_c_2", "alcohol_audit_c_3")
   ])) == 0
 )
-
 
 # ---------------------------------------------------------------------------- #
 # Identify participants with incomplete MDIB data at baseline ----
@@ -676,7 +645,9 @@ stopifnot(all(incompl_mdib_bl_tbl$n_mdib_incomplete_bl > 0))
 # leaving 82 participants in the analysis sample. If these checks fail after a
 # future data export, inspect incompl_mdib_bl_tbl and update the expected counts.
 
+stopifnot(length(unique(mdib_bl_item_dat$record_id)) == 88)
 stopifnot(length(incompl_mdib_bl_data_ids) == 6)
+
 stopifnot(88 - length(incompl_mdib_bl_data_ids) == 82)
 
 # Export the diagnostic table for reproducibility.
@@ -689,7 +660,6 @@ write.csv(
   file.path(missing_rates_path, "incomplete_mdib_bl_exclusion_tbl.csv"),
   row.names = FALSE
 )
-
 
 # ---------------------------------------------------------------------------- #
 # Compute scale-level missingness due to all items coded as "prefer not to answer" ----
@@ -859,7 +829,7 @@ mdib_bl_item_missing_tbl <- mdib_bl_item_missing_tbl[
   mdib_bl_item_missing_tbl$n_missing > 0,
 ]
 
-row.names(mdib_bl_item_missing_tbl) <- 1:nrow(mdib_bl_item_missing_tbl)
+row.names(mdib_bl_item_missing_tbl) <- NULL
 
 # Export item-level baseline MDIB missingness table.
 
@@ -951,11 +921,3 @@ dir.create("./data/helper", recursive = TRUE, showWarnings = FALSE)
 save(mdib_pd_dat, file = "./data/further_clean/mdib_pd_dat.RData")
 save(mdib_dat_items, file = "./data/helper/mdib_dat_items.RData")
 save(mdib_item_map,  file = "./data/helper/mdib_item_map.RData")
-
-
-
-
-
-
-
-

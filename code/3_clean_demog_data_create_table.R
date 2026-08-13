@@ -10,20 +10,18 @@
 # project root folder.
 
 # ---------------------------------------------------------------------------- #
-# Store working directory, load helper functions, and set package-version date ----
+# Load helper functions and set package-version date ----
 # ---------------------------------------------------------------------------- #
 
-wd_dir <- getwd()
-
-source("./1a_define_functions.R")
+source("./code/1a_define_functions.R")
 
 groundhog_day <- version_control()
 
 pkgs <- c("flextable", "officer", "ftExtra")
 groundhog.library(pkgs, groundhog_day)
 
-source("./1b_set_flextable_defaults.R")
-source("./1c_set_officer_properties.R")
+source("./code/1b_set_flextable_defaults.R")
+source("./code/1c_set_officer_properties.R")
 
 # ---------------------------------------------------------------------------- #
 # Import cleaned PD analysis data ----
@@ -180,7 +178,6 @@ stopifnot(sum(dem_dat$race_coll == "Missing", na.rm = TRUE) == 2)
 
 table(dem_dat$race_coll, useNA = "ifany")
 
-
 # ---------------------------------------------------------------------------- #
 # Clean categorical demographic variables ----
 # ---------------------------------------------------------------------------- #
@@ -321,7 +318,6 @@ stopifnot(all(sapply(
   function(x) sum(is.na(x)) == 0
 )))
 
-
 # Inspect cleaned categorical demographic distributions.
 
 lapply(
@@ -329,7 +325,6 @@ lapply(
   table,
   useNA = "ifany"
 )
-
 
 # ---------------------------------------------------------------------------- #
 # Clean country ----
@@ -342,7 +337,7 @@ dem_dat$country <- trimws(dem_dat$country)
 
 united_states <- c(
   "America", "U.S.", "united states", "United States",
-  "United States of America", "US", "usa", "Usa", "USA"
+  "United States of America", "us", "US", "usa", "Usa", "USA"
 )
 
 dem_dat$country[dem_dat$country %in% united_states] <- "United States"
@@ -354,7 +349,6 @@ stopifnot(sum(table(dem_dat$country, useNA = "ifany")) == 82)
 stopifnot(sum(is.na(dem_dat$country)) == 0)
 
 table(dem_dat$country, useNA = "ifany")
-
 
 # ---------------------------------------------------------------------------- #
 # Clean study awareness ----
@@ -416,7 +410,6 @@ stopifnot(sum(is.na(dem_dat$study_awareness)) == 0)
 
 table(dem_dat$study_awareness, useNA = "ifany")
 
-
 # ---------------------------------------------------------------------------- #
 # Clean survey help ----
 # ---------------------------------------------------------------------------- #
@@ -447,7 +440,6 @@ stopifnot(sum(is.na(dem_dat$survey_help)) == 0)
 
 table(dem_dat$survey_help, useNA = "ifany")
 
-
 # ---------------------------------------------------------------------------- #
 # Save cleaned demographic data ----
 # ---------------------------------------------------------------------------- #
@@ -455,7 +447,6 @@ table(dem_dat$survey_help, useNA = "ifany")
 dir.create("./data/further_clean", recursive = TRUE, showWarnings = FALSE)
 
 save(dem_dat, file = "./data/further_clean/dem_dat.RData")
-
 
 # ---------------------------------------------------------------------------- #
 # Define function to compute demographic descriptives ----
@@ -582,7 +573,6 @@ dir.create(dem_path, recursive = TRUE, showWarnings = FALSE)
 write.csv(dem_tbl,     paste0(dem_path, "dem_tbl.csv"),          row.names = FALSE)
 write.csv(dem_tbl_ext, paste0(dem_path, "dem_tbl_extended.csv"), row.names = FALSE)
 
-
 # ---------------------------------------------------------------------------- #
 # Format demographics table ----
 # ---------------------------------------------------------------------------- #
@@ -591,6 +581,12 @@ write.csv(dem_tbl_ext, paste0(dem_path, "dem_tbl_extended.csv"), row.names = FAL
 # section properties are sourced above.
 
 format_dem_tbl <- function(dem_tbl, title) {
+  
+  # Recode labels
+  
+  dem_tbl$label[dem_tbl$label == "Doctorate/ PhD"]    <- "Doctorate/PhD"
+  dem_tbl$label[dem_tbl$label == "Working full-time"] <- "Working full time"
+  dem_tbl$label[dem_tbl$label == "Working part-time"] <- "Working part time"
   
   # Format the label column using Markdown.
   
@@ -611,11 +607,11 @@ format_dem_tbl <- function(dem_tbl, title) {
   dem_tbl$label_md <- gsub("n \\(%\\)", "*n* \\(%\\)", dem_tbl$label_md)
   dem_tbl$label_md <- gsub("M \\(SD\\)", "*M* \\(*SD*\\)", dem_tbl$label_md)
   
-  dem_tbl <- dem_tbl[c("label_md", names(dem_tbl)[names(dem_tbl) != "label_md"])]
+  dem_tbl <- dem_tbl[c("label_md", setdiff(names(dem_tbl), "label_md"))]
   
   # Define columns to display.
   
-  target_cols <- names(dem_tbl)[!(names(dem_tbl) %in% "label")]
+  target_cols <- setdiff(names(dem_tbl), "label")
   
   # Create flextable.
   
@@ -637,14 +633,6 @@ format_dem_tbl <- function(dem_tbl, title) {
       value    = "Value"
     ) |>
     colformat_md(j = "label_md", part = "body") |>
-    labelizor(
-      part = "body",
-      labels = c(
-        "Doctorate/ PhD"    = "Doctorate/PhD",
-        "Working full-time" = "Working full time",
-        "Working part-time" = "Working part time"
-      )
-    ) |>
     autofit()
   
   return(dem_tbl_ft)
@@ -690,9 +678,3 @@ if (dem_tbl_orientation == "p") {
 }
 
 print(doc, target = paste0(dem_path, "dem_tbl.docx"))
-
-
-
-
-
-
