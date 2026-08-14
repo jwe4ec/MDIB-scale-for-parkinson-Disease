@@ -582,37 +582,28 @@ mdib_bl_neg_12 <- mdib_bl[, grepl("^mdib_neg", names(mdib_bl)), drop = FALSE]
 
 stopifnot(ncol(mdib_bl_neg_12) == 12)
 
-# The 12 negative items are a subset of the complete baseline MDIB item data and
-# should therefore also have no missing item-level responses.
-stopifnot(sum(is.na(mdib_bl_neg_12)) == 0)
-stopifnot(sum(mdib_bl_neg_12 == 99, na.rm = TRUE) == 0)
-stopifnot(nrow(mdib_bl_neg_12) == expected_efa_n)
-
-
-neg_12_path <- file.path(efa_path, "neg12")
-neg_12_dist_path <- file.path(neg_12_path, "dist")
-
 export_item_distributions(
   df = mdib_bl_neg_12,
-  path = neg_12_dist_path,
+  path = dist_path,
   filename_stem = "neg12"
 )
 
 plot_item_hists(
   df = mdib_bl_neg_12,
-  path = neg_12_dist_path,
+  path = dist_path,
   filename_stem = "neg12"
 )
 
 # Result note:
-# The 12 negative items show pronounced floor effects, with sparse endorsement of
-# high response categories. This distributional pattern supports retaining the
-# categorical-item workflow for the negative-item EFAs.
+# As noted above, the 12 negative items show pronounced floor effects, with 
+# sparse endorsement of high response categories. This distributional pattern 
+# supports retaining the categorical-item workflow for the negative-item EFAs.
 
 # ---------------------------------------------------------------------------- #
 # Step 5: Parallel analysis for the 12 negative bias items ----
 # ---------------------------------------------------------------------------- #
 
+neg_12_path <- file.path(efa_path, "neg12")
 neg_12_pa_path <- file.path(neg_12_path, "pa")
 
 pa_neg_12_minres <- run_pa_poly(
