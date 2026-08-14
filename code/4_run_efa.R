@@ -21,7 +21,7 @@
 # - Use oblimin rotation as the primary solution.
 # - Use geomin and promax rotations as sensitivity analyses.
 #
-# This script intentionally removes:
+# This script excludes prior analyses that were run but were vestiges of the HD script:
 # - scree plot analyses,
 # - parallel analyses based on Pearson correlations,
 # - MLM EFA models,
@@ -41,8 +41,8 @@
 #   analyses proceeded to the 12 theorized negative items, consistent with the
 #   analysis plan and the theorized negative-bias item set.
 # - For the 12 negative items, polychoric parallel analysis suggested a one-
-#   component upper bound. Following the preregistered +/- 1 approach, 1- and
-#   2-factor WLSMV EFA solutions were examined.
+#   component upper bound. Following the preregistered +/- 1 approach and theory
+#   positing 2 factors, 1- and 2-factor WLSMV EFA solutions were examined.
 # - The 12-item 1-factor solution supported a broad negative bias factor but had
 #   poor model fit and a very weak item, mdib_neg_int_remember_1b.
 # - The 12-item 2-factor solution was more consistent with the theorized
@@ -52,9 +52,8 @@
 #     3. mdib_neg_int_email_6b showed a mild cross-loading in some rotations.
 # - Across the item-removal sequences, mdib_neg_int_remember_1b and
 #   mdib_neg_ext_server_2a were the clearest problematic items. The evidence for
-#   removing mdib_neg_int_email_6b was weaker because it retained a salient
-#   primary loading on the internal factor and was cleaner in promax sensitivity
-#   analyses.
+#   removing mdib_neg_int_email_6b was weaker because it retained a salient primary 
+#   loading on the internal factor and was cleaner in promax sensitivity analyses.
 # - A 10-item solution that removes mdib_neg_int_remember_1b and
 #   mdib_neg_ext_server_2a but retains mdib_neg_int_email_6b is therefore a
 #   balanced candidate solution. A stricter 9-item solution that also removes
