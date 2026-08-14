@@ -8,15 +8,16 @@
 
 # Before running this script:
 # 1. Restart R.
-# 2. Set the working directory to the project parent folder.
+# 2. Set the working directory to the project root folder.
 # 3. Make sure the PD data preparation scripts export PD-labeled objects.
 #
 # This script follows the PD preregistered EFA plan:
 # - Inspect item distributions first.
 # - If items are severely skewed, treat items as categorical.
 # - Use parallel analysis directly, without scree plots.
-# - For categorical items, use polychoric correlations in parallel analyses.
-# - Use WLSMV estimation for EFAs.
+# - For categorical items:
+#   - Use polychoric correlations in parallel analyses.
+#   - Use WLSMV estimation for EFAs.
 # - Use oblimin rotation as the primary solution.
 # - Use geomin and promax rotations as sensitivity analyses.
 #
