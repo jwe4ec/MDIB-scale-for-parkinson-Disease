@@ -128,6 +128,7 @@ export_item_distributions <- function(df, path, filename_stem) {
 
   dist_list <- lapply(names(df), function(item) {
     tab <- table(df[[item]], useNA = "ifany")
+    
     data.frame(
       item = item,
       response = names(tab),
@@ -138,6 +139,7 @@ export_item_distributions <- function(df, path, filename_stem) {
   })
 
   dist_df <- do.call(rbind, dist_list)
+  
   write.csv(
     dist_df,
     file.path(path, paste0(filename_stem, "_item_distributions.csv")),
@@ -159,6 +161,7 @@ plot_item_hists <- function(df, path, filename_stem, n_per_page = 6) {
     cols <- start_col:end_col
 
     par(mfrow = c(3, 2))
+    
     for (i in cols) {
       hist(
         df[[i]],
@@ -176,12 +179,12 @@ plot_item_hists <- function(df, path, filename_stem, n_per_page = 6) {
 
 # Convert MDIB items to ordered factors for categorical analyses.
 # Unobserved response categories are not artificially added. Because Script 2
-# restricts the EFA sample to complete baseline MDIB data, this function should
-# receive item data with no missing responses.
+# (2_clean_data_compute_item_missingness.R) restricts the EFA sample to complete 
+# baseline MDIB data, this function should receive item data with no missing responses.
 
 make_ordered_mdib <- function(df) {
+  stopifnot(all(range(df, na.rm = TRUE) == c(0, 4)))
   stopifnot(sum(is.na(df)) == 0)
-  stopifnot(sum(df == 99, na.rm = TRUE) == 0)
   
   df_ord <- as.data.frame(lapply(df, function(x) {
     factor(x, levels = sort(unique(x)), ordered = TRUE)
@@ -459,10 +462,9 @@ stopifnot(all(names(mdib_bl) == mdib_item_map$items_rename))
 expected_efa_n <- 82
 
 stopifnot(nrow(mdib_bl) == length(unique(mdib_pd_dat$record_id)))
+stopifnot(all(range(mdib_bl, na.rm = TRUE) == c(0, 4)))
 stopifnot(sum(is.na(mdib_bl)) == 0)
-stopifnot(sum(mdib_bl == 99, na.rm = TRUE) == 0)
 stopifnot(nrow(mdib_bl) == expected_efa_n)
-
 
 # ---------------------------------------------------------------------------- #
 # Define output paths ----
@@ -495,7 +497,7 @@ plot_item_hists(
 # Visual inspection of the updated item distributions continued to support the
 # ordered-categorical EFA workflow. The negative items showed pronounced floor
 # effects, with an average of approximately 78% of responses in categories 0 or 1
-# and only approximately 10% of responses in categories 3 or 4. In contrast, the
+# and only approximately 10% of responses in categories 3 or 4. By contrast, the
 # benign items showed more responses in the middle-to-upper categories, with an
 # average of approximately 46% of responses in categories 3 or 4. These
 # distributional patterns support using polychoric correlations in the parallel
