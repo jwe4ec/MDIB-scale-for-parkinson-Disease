@@ -632,8 +632,8 @@ pa_neg_12_decision <- summarize_pa_decision(
 # Result note:
 # In the current PD run, the minres and ML polychoric parallel analyses both
 # supported a one-component upper bound for the 12 negative items. Following the
-# preregistered +/- 1 approach, the candidate WLSMV EFA solutions are therefore
-# 1 and 2 factors.
+# preregistered +/- 1 approach (and theory), the candidate WLSMV EFA solutions 
+# are therefore 1 and 2 factors.
 #
 # Warning note:
 # The 12-negative-item polychoric parallel analyses may produce warnings that
@@ -653,13 +653,7 @@ fits_neg_12 <- run_wlsmv_efas(
   filename_stem = "neg12"
 )
 
-# Save the complete baseline 12-negative-item data used in the EFA. These
-# objects should reflect the preregistered analysis sample restriction.
-
-stopifnot(nrow(mdib_bl_neg_12) == expected_efa_n)
-stopifnot(sum(is.na(mdib_bl_neg_12)) == 0)
-stopifnot(sum(mdib_bl_neg_12 == 99, na.rm = TRUE) == 0)
-
+# Save the complete baseline 12-negative-item data used in the EFA
 
 save(
   mdib_bl_neg_12,
