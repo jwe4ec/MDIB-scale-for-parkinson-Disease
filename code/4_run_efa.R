@@ -199,15 +199,18 @@ make_ordered_mdib <- function(df) {
 # Run parallel analysis based on principal components and polychoric correlations.
 # Important: psych::fa.parallel prints ncomp, but for this project we do not base
 # the decision on the printed ncomp value. Instead, following prior guidance for
-# related analyses, we explicitly count how many observed principal-component
-# eigenvalues exceed the mean simulated or resampled eigenvalues.
+# the HD analyses, we explicitly count how many observed principal-component
+# eigenvalues exceed the mean of the eigenvalues across many datasets (based on
+# either simulated random data or resampling from our sample's data).
 #
 # Expected warnings:
-# - "The items do not have an equal number of response alternatives" can occur
-#   because severely skewed items have sparse or unobserved response categories.
-# - "Matrix was not positive definite, smoothing was done" can occur for the
-#   36-item polychoric matrix, likely because the number of items is large relative
-#   to the usable sample size and several response categories are sparse.
+# - "In polychoric(x, correct = correct): The items do not have an equal number 
+#   of response alternatives, global set to FALSE."
+#   - Can occur because severely skewed items have sparse or unobserved response categories.
+# - "In cor.smooth(mat): Matrix was not positive definite, smoothing was done"
+#   - Can occur for the 36-item polychoric matrix, likely because the number of 
+#     items is large relative to the usable sample size and several response 
+#     categories are sparse.
 run_pa_poly <- function(df, path, filename_stem, fm = "minres", n_iter = 100) {
   make_dir(path)
 
@@ -492,16 +495,18 @@ plot_item_hists(
   filename_stem = "all36"
 )
 
-# Result note:
-#
-# Visual inspection of the updated item distributions continued to support the
-# ordered-categorical EFA workflow. The negative items showed pronounced floor
-# effects, with an average of approximately 78% of responses in categories 0 or 1
-# and only approximately 10% of responses in categories 3 or 4. By contrast, the
-# benign items showed more responses in the middle-to-upper categories, with an
-# average of approximately 46% of responses in categories 3 or 4. These
-# distributional patterns support using polychoric correlations in the parallel
-# analyses and WLSMV estimation in the EFAs.
+# Result notes:
+# - Items with empty categories:
+#   - mdib_ben_int_remember_1c: no responses of 0
+#   - mdib_neg_ext_server_2a: no responses of 4
+# - Visual inspection of the updated item distributions continued to support the
+#   ordered-categorical EFA workflow. The negative items showed pronounced floor
+#   effects, with an average of approximately 78% of responses in categories 0 or 1
+#   and only approximately 10% of responses in categories 3 or 4. By contrast, the
+#   benign items showed more responses in the middle-to-upper categories, with an
+#   average of approximately 46% of responses in categories 3 or 4. These
+#   distributional patterns support using polychoric correlations in the parallel
+#   analyses and WLSMV estimation in the EFAs.
 
 # ---------------------------------------------------------------------------- #
 # Step 2: Parallel analysis for all 36 MDIB items ----
