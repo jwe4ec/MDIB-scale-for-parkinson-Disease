@@ -332,7 +332,7 @@ save(
 # absolute fit remained poor, the factor correlation was high, and key item-level
 # concerns remained. mdib_neg_int_remember_1b did not load saliently,
 # mdib_neg_ext_server_2a loaded primarily with the internal items despite being
-# theorized as an external item, and mdib_neg_int_email_6b showed a mild
+# theorized as an external item, and mdib_neg_int_email_6b showed a moderate
 # cross-loading in the geomin solution, although its primary loading was on the
 # internal factor and the oblimin/promax solutions were cleaner.
 
