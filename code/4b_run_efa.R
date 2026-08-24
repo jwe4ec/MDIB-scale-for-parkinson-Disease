@@ -447,7 +447,3 @@ for (sequence_name in names(removal_sequences)) {
 # These comments document the decision logic for discussion with the team. The
 # final retained item set should be decided after reviewing the EFA notes, factor
 # loading tables, model fit, item content, and theoretical coverage.
-
-# ---------------------------------------------------------------------------- #
-# End of script ----
-# ---------------------------------------------------------------------------- #
