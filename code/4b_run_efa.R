@@ -49,7 +49,7 @@
 #   internal/external distinction, but three item-level concerns remained:
 #     1. mdib_neg_int_remember_1b did not load saliently on either factor.
 #     2. mdib_neg_ext_server_2a loaded with the internal rather than external items.
-#     3. mdib_neg_int_email_6b showed a mild cross-loading in some rotations.
+#     3. mdib_neg_int_email_6b showed a moderate cross-loading in some rotations.
 # - Across the item-removal sequences, mdib_neg_int_remember_1b and
 #   mdib_neg_ext_server_2a were the clearest problematic items. The evidence for
 #   removing mdib_neg_int_email_6b was weaker because it retained a salient primary 
@@ -343,17 +343,20 @@ save(
 # These sequences are not exhaustive. They are chosen to reflect decision rules
 # that can be described in the paper:
 #
-# Sequence A: Start with the item that did not load saliently on either factor,
-# then remove the internal item with a mild cross-loading and the external item
-# with a theory-inconsistent loading.
+# Sequence A: Start with the item that did not load saliently on either factor
+# (mdib_neg_int_remember_1b), then remove the internal item with a moderate cross-
+# loading (mdib_neg_int_email_6b) and the external item with a theory-inconsistent
+# loading (mdib_neg_ext_server_2a)
 #
-# Sequence B: Start with the external item that loaded with the internal factor,
-# then remove the internal item with a mild cross-loading, and then remove the
-# nonsalient item if still needed.
+# Sequence B: Start with the external item that loaded with the internal factor
+# (mdib_neg_ext_server_2a), then remove the internal item with a moderate cross-
+# loading (mdib_neg_int_email_6b), and then remove the nonsalient item if still 
+# needed (mdib_neg_int_remember_1b)
 #
-# Sequence C: Start with the internal item with a mild cross-loading, then remove
-# the external item that loaded with the internal factor, and then remove the
-# nonsalient item if still needed.
+# Sequence C: Start with the internal item with a moderate cross-loading 
+# (mdib_neg_int_email_6b), then remove the external item that loaded with the 
+# internal factor (mdib_neg_ext_server_2a), and then remove the nonsalient item 
+# if still needed (mdib_neg_int_remember_1b)
 #
 # Result-informed rationale:
 # Across these sequences, mdib_neg_int_remember_1b and mdib_neg_ext_server_2a
